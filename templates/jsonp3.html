@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta http-equiv="content-type" content="application/json" charset=UTF-8">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<button id="btn">点击</button>
+<script>
+    $('#btn').click(function () {
+        $.ajax({
+            url:'http://127.0.0.1:8002/jsonp4/', //访问其他服务器的路由，不同源,那么你可以访问到另外一个服务器，但是浏览器将响应内容给拦截了，并给你不同源的错误
+            type:'get',
+            success:function (response) {
+                console.log(response);
+            }
+        })
+    })
+</script>
+</body>
+</html>

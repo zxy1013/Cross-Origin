@@ -1,0 +1,60 @@
+CORB(Cross-Origin Read Blocking)
+浏览器在加载可以跨域资源时，在将资源载入页面时对其进行识别与拦截等一系列处理。
+X-Content-Type-Options(:nosniff)
+相当于一个提示标志，被服务器用来提示客户端须遵循在Content-Type首部中对MIME类型的设定，不能对其进行修改。
+从而禁用了客户端（浏览器）的MIME类型嗅探行为（即把不可执行的MIME类型转变为可执行的MIME类型）。
+指定值为nosniff时，会拒绝以下两种请求：
+请求类型：style，MIME类型不是“text/css”
+请求类型：script，MIME类型不是“Javascript类型”
+Javascript类型有text/javascript、application/javascript、application/x-javascript等
+所以当服务端出现response.addHeader("X-Content-Type-Options", "nosniff")安全响应头，且未指定Content-Type为Javascript类型类型时
+jsonp请求跨域资源时会出现如上CORB或拒绝解析的问题。
+
+修改方法如下：
+去除服务端response.addHeader("X-Content-Type-Options", "nosniff")的配置，但可能造成一些安全上的问题
+服务指定Content-Type为Javascript类型的一种
+启用jsonp，将跨域的数据请求转到本站服务器，由本站服务器去做跨域请求，即跳过浏览器同源策略的限制
+
+
+
+django-cors-headers
+pip install django-cors-headers
+
+添加app setting放到最后
+INSTALLED_APPS = (
+    'corsheaders',
+)
+
+添加中间件 注意添加的顺序
+MIDDLEWARE = [
+    ...
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',]
+
+配置允许跨站访问本站的地址
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+      'http://127.0.0.1:8000',
+)
+CORS_ORIGIN_WHITELIST = ()  # 默认值是全部
+CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(\w+.)?>google.com$', )# 或者定义允许的匹配路径正则表达式.
+
+设置允许访问的方法
+CORS_ALLOW_METHODS = (
+'GET',
+'POST',
+'PUT',
+'PATCH',
+'DELETE',
+'OPTIONS'
+)
+
+设置允许的header:
+CORS_ALLOW_HEADERS = (
+'x-requested-with',
+'content-type',
+'accept',
+'origin',
+'authorization',
+'x-csrftoken'
+)

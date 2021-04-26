@@ -1,0 +1,22 @@
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta http-equiv="content-type" content='text/html' charset=UTF-8">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<button id="btn">点击</button>
+<script>
+    $("#btn").click(function () {
+        $.ajax({
+            url:"http://127.0.0.1:8002/jsonp2?",
+            dataType:"jsonp",
+            type: 'GET',
+            jsonpCallback:"callback"
+        }).done(function (data) {
+            console.log(data);//回调函数
+        })
+    });
+</script>
+</body>
+</html>

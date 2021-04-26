@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<input type="button" onclick="AjaxRequest()" value="跨域Ajax" />
+<div id="container"></div>
+    <script type="text/javascript">
+        function AjaxRequest() {
+            $.ajax({
+                url: 'http://www.jxntv.cn/data/jmd-jxtv2.html?callback=list&_=1454376870403',
+                type: 'GET',
+                dataType: 'jsonp',
+                jsonp: 'callback',
+                jsonpCallback: 'list',
+                success: function (data) {
+                    $.each(data.data,function(i){    {# 循环 #}
+                        var item = data.data[i];
+                        var str = "<p>"+ item.week +"</p>";   {# 添加日期标签 #}
+                        $('#container').append(str);
+                        $.each(item.list,function(j){   {# 循环 #}
+                            var temp = "<a href='" + item.list[j].link +"'>" + item.list[j].name +" </a><br/>";
+                            $('#container').append(temp);
+                        });
+                        $('#container').append("<hr/>");
+                    })
+                }
+            });
+        }
+</script>
+</body>
+</html>
